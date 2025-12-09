@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Housing Menu</title>
+    <style>
+      html, body {
+        margin: 0;
+        padding: 0;
+        width: 100%;
+        height: 100%;
+        background: transparent !important;
+        overflow: hidden;
+      }
+      #root {
+        width: 100%;
+        height: 100%;
+        background: transparent;
+      }
+    </style>
+    <script type="module" crossorigin src="./assets/index.js"></script>
+    <link rel="stylesheet" crossorigin href="./assets/index.css">
+  </head>
+  <body>
+    <div id="root"></div>
+    <script>
+      // Hide workshop tab button in the React UI
+      window.addEventListener('DOMContentLoaded', () => {
+        const hideWorkshop = () => {
+          document.querySelectorAll('button').forEach((btn) => {
+            if (btn.textContent && btn.textContent.trim().toLowerCase() === 'workshop') {
+              btn.style.display = 'none';
+            }
+          });
+        };
+        hideWorkshop();
+        const obs = new MutationObserver(hideWorkshop);
+        obs.observe(document.body, { childList: true, subtree: true });
+      });
+
+      // Add remove buttons to resident rows (DOM patch since compiled UI lacks it)
+      window.addEventListener('DOMContentLoaded', () => {
+        const getResource = () => {
+          return (window.GetParentResourceName && window.GetParentResourceName()) || 'mk-housingmanage';
+        };
+
+        const getHouseId = () => {
+          const header = Array.from(document.querySelectorAll('header, h1, h2, h3, span')).find(
+            (el) => el.textContent && el.textContent.includes('House #')
+          );
+          if (!header) return null;
+          const match = header.textContent.match(/House #(\d+)/);
+          return match ? parseInt(match[1], 10) : null;
+        };
+
+        // No actions/remove column needed; do nothing.
+      });
+    </script>
+  </body>
+</html>
